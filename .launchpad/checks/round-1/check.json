@@ -1,0 +1,28 @@
+{
+  "name": "round 1: The core",
+  "run": "node .launchpad/checks/round-1/run.mjs",
+  "timeoutSeconds": 180,
+  "tests": [
+    "list prints the seven agents, one line each as <id>\\t<name>\\t<kind>, in catalogue order",
+    "list --json prints a JSON array of { id, name, kind } in catalogue order",
+    "link claude prints one JSON line { agent, kind: \"url\", value: \"https://claude.ai/new?q=…\" } with the prompt URL-encoded",
+    "link chatgpt prints one JSON line { agent, kind: \"url\", value: \"https://chatgpt.com/?q=…\" } with the prompt URL-encoded",
+    "link perplexity prints one JSON line { agent, kind: \"url\", value: \"https://www.perplexity.ai/search?q=…\" } with the prompt URL-encoded",
+    "link le-chat prints one JSON line { agent, kind: \"url\", value: \"https://chat.mistral.ai/chat?q=…\" } with the prompt URL-encoded",
+    "link cursor prints one JSON line { agent, kind: \"deeplink\", value: \"cursor://anysphere.cursor-deeplink/prompt?text=…\" } with the prompt URL-encoded",
+    "link claude-code prints one JSON line { agent, kind: \"command\", value: \"claude …\" } with the prompt single-quoted",
+    "link codex prints one JSON line { agent, kind: \"command\", value: \"codex …\" } with the prompt single-quoted",
+    "link URL-encodes Unicode, emoji, newlines, quotes, spaces, +, & and # exactly as encodeURIComponent does",
+    "link single-quotes a command for a POSIX shell: each ' becomes '\\'' and $, `, \\, \" and newlines stay as they are",
+    "link uses the prompt exactly as given: leading and trailing spaces and newlines are kept",
+    "link <id> --file <path> reads the prompt from a UTF-8 file, unchanged (its final newline included)",
+    "link accepts a url of exactly 8000 characters and refuses one of 8001 with exit 3",
+    "link measures the 8000-character limit on the encoded link, not on the raw prompt (exit 3)",
+    "the 8000-character limit applies to the cursor deeplink (exit 3) but never to commands",
+    "link refuses an unknown agent with exit 2 and an error: line on stderr",
+    "link refuses an empty or whitespace-only prompt with exit 2",
+    "link refuses a missing prompt, a missing agent, or both a prompt and --file, with exit 2",
+    "link refuses a --file that cannot be read with exit 2",
+    "the CLI refuses no command, an unknown command and an extra argument with exit 2"
+  ]
+}
