@@ -69,10 +69,34 @@ Plain ES modules, Node.js 20 or later, no dependency and no build step: a page i
 
 ## The button (round 2 onwards)
 
-`<connect-agent prompt="…">` renders a button. Clicking it opens a picker, MetaMask style: one row per
-agent. Choosing a `url` or `deeplink` agent opens its link (`window.open`, new tab); choosing a
-`command` agent copies the command to the clipboard and says so. Round 2's brief names the
-`data-testid` hooks the checks use; later rounds add to them and never rename them.
+`<connect-agent prompt="…" label="…">` renders a button. Clicking it opens a picker, MetaMask style:
+one row per agent. Choosing a `url` or `deeplink` agent opens its link (`window.open(value, "_blank")`);
+choosing a `command` agent copies the command (`navigator.clipboard.writeText`) and says so. Markup in
+the light DOM or an open shadow root. The checks find it by these hooks; later rounds add to them and
+never rename them:
+
+| Round | `data-testid` | What it is |
+| --- | --- | --- |
+| 2 | `connect-button` | the `<button>`; `disabled` with no prompt |
+| 2 | `picker` | the picker, `role="dialog"`, `aria-modal="true"` |
+| 2 | `agent-<id>` | one `<button>` per agent, catalogue order; `aria-disabled="true"` when its link is too long |
+| 2 | `picker-close` | closes the picker |
+| 2 | `notice` | `role="status"` message: command copied, prompt copied |
+| 3 | `switch-agent`, `disconnect` | shown when an agent is remembered |
+| 4 | `copy-prompt` | the picker's last row: copies the filled prompt |
+
+- Round 2, keyboard: focus moves to the first agent on opening; ArrowDown/ArrowUp (wrapping), Enter and
+  Space choose, Escape closes; focus returns to the button. A click outside closes it.
+- Round 3: the chosen agent's id lives in `localStorage` under `connect-agent:agent`; the `agents`
+  attribute filters and orders the picker; CSS variables `--connect-agent-bg`, `--connect-agent-fg`,
+  `--connect-agent-radius`, `--connect-agent-font` and parts `button`, `picker`, `agent`; events
+  `connect-agent:open` (cancelable, `{ agent, kind, value }`), `connect-agent:connect` and
+  `connect-agent:disconnect` (`{ agent }`), bubbling and composed.
+- Round 4: `fillPrompt(template, { url, title, selection })` in `src/prompts.mjs` fills `{{url}}`,
+  `{{title}}`, `{{selection}}`; a prompt too long for a link is copied, then the agent's home opens
+  (Cursor: copy only) with a notice; `connect-agent:open` gains `prompt` and `fallback`.
+
+Each round's brief in `.launchpad/project.md` is the full statement.
 
 ## Rounds
 
@@ -93,6 +117,7 @@ events API. Round 4: placeholder handling, the long-prompt fallback and its UX.
 
 ## Settings
 
-Winner takes all (1,000,000 points per round). One-hour build, half-hour reveal (entries sealed with a
-deposit are revealed by the platform), one-hour checks and ranking; the creator confirms or overrides
-the judges' ranking before it closes.
+Winner takes all (1,000,000 points per round). One-hour build, half-hour reveal at most (entries
+sealed with a deposit are revealed by the platform, and the reveal closes once all are in), one-hour
+checks and ranking; the creator confirms or overrides the judges' ranking before it closes. Round 1
+opens when the creator opens it from its page after the launch.
