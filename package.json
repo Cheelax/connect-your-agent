@@ -1,0 +1,24 @@
+{
+  "name": "connect-your-agent",
+  "version": "0.0.0",
+  "description": "A drop-in button that opens your visitor's agent (Claude, ChatGPT, Cursor, Claude Code…) with your page's prompt already pasted.",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "connect-agent": "bin/connect-agent.mjs"
+  },
+  "exports": {
+    ".": "./src/harnesses.mjs"
+  },
+  "files": [
+    "bin",
+    "src"
+  ],
+  "scripts": {
+    "test": "node --test",
+    "demo": "node demo/serve.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
