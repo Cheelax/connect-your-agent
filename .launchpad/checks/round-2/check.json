@@ -1,0 +1,30 @@
+{
+  "name": "round 2: The button",
+  "run": "node .launchpad/checks/round-2/run.mjs",
+  "timeoutSeconds": 300,
+  "tests": [
+    "src/connect-agent.mjs loads as a module with no error and defines the custom element connect-agent",
+    "the module builds its links with round 1's core: loading it loads /src/harnesses.mjs",
+    "the element's markup is in its light DOM or its open shadow root",
+    "the button is a <button> data-testid=\"connect-button\" reading \"Connect your agent\" by default, or the label attribute",
+    "the button is disabled with no prompt, an empty prompt or a whitespace-only one, and enabled with a real one",
+    "changing the label attribute changes the button's text, and removing it brings back \"Connect your agent\"",
+    "changing the prompt attribute updates the element: its disabled state, then the link it opens",
+    "clicking the button opens the picker: data-testid=\"picker\", not shown before, role=\"dialog\", aria-modal=\"true\", labelled",
+    "the picker shows the seven agents in catalogue order, each a <button> data-testid=\"agent-<id>\" showing its name",
+    "the close control data-testid=\"picker-close\" closes the picker, and the focus returns to the button",
+    "choosing Claude, ChatGPT, Perplexity, Le Chat or Cursor closes the picker and calls window.open(link, \"_blank\") once, with linkFor's value",
+    "choosing Claude Code or Codex CLI closes the picker, copies the command with navigator.clipboard.writeText, and a role=\"status\" notice says it was copied and to paste it in a terminal",
+    "an agent whose link would be over 8,000 characters is shown with aria-disabled=\"true\" and the reason, and choosing it does nothing",
+    "the limit is measured on the encoded link: exactly 8,000 characters can be chosen, 8,001 cannot, and commands never reach it",
+    "opening the picker moves the focus to the first agent, Claude, whether it is opened by a click or from the keyboard",
+    "ArrowDown and ArrowUp move the focus from agent to agent, wrapping at both ends",
+    "Enter and Space on a focused agent choose it, once, then the picker closes and the focus returns to the button",
+    "Escape closes the picker without choosing, and the focus returns to the button",
+    "a click outside the picker closes it without choosing an agent",
+    "two <connect-agent> on one page work independently: each has its own picker, prompt, notice and ARIA references",
+    "the button loads nothing but the local server: no request to another host while it is used",
+    "the button has no dependency: package.json declares none and the page loads nothing from node_modules",
+    "demo/index.html, which npm run demo serves, shows a <connect-agent> with a prompt whose button opens the picker"
+  ]
+}
