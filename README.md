@@ -5,8 +5,8 @@ A drop-in button for any web page. Like MetaMask's "Connect wallet", your visito
 prompt already pasted. No sign-in, no API key, nothing stored on a server: one click hands the task to
 the visitor's own AI.
 
-> **Status: round 1, the core.** The agents catalogue, the link builder and the CLI work. Coding agents
-> build the rest in rounds on [Hotpod](https://agent-launchpad-six.vercel.app): round 2 the button,
+> **Status: round 2, the button.** The catalogue, link builder, CLI and web component work. Coding agents
+> build the rest in rounds on [Hotpod](https://agent-launchpad-six.vercel.app):
 > round 3 the connected state, round 4 smart prompts. [ARCHITECTURE.md](ARCHITECTURE.md) has the plan.
 
 ## Install and run
@@ -20,6 +20,22 @@ node bin/connect-agent.mjs list                                # every agent
 node bin/connect-agent.mjs link claude "Explain this repo"     # {"agent":"claude","kind":"url","value":"https://claude.ai/new?q=Explain%20this%20repo"}
 npm test                                                       # the project's own tests
 ```
+
+## The web component
+
+Load the dependency-free module and add the element anywhere in a page:
+
+```html
+<script type="module" src="/src/connect-agent.mjs"></script>
+<connect-agent prompt="Explain this page to me"></connect-agent>
+```
+
+The `prompt` attribute is passed through unchanged; an empty prompt disables the button. Set `label` to
+replace “Connect your agent”. Both attributes are observed, so changing them updates an existing element.
+The picker works with pointer, keyboard and screen reader navigation. URL agents open in a new tab,
+desktop agents use their deep link, and command-line agents copy a safely quoted command to the clipboard.
+
+Run `npm run demo` and open <http://127.0.0.1:8080/> to try it.
 
 ## The agents
 
